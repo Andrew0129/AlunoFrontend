@@ -153,6 +153,11 @@ export default {
           this.errors = {}
           alert('Atualizado com sucesso!')
           this.listar()
+          document.getElementById('formCad').style.display = "none";
+          document.getElementById('limpar').style.display = "none";
+          document.getElementById('CadAluno').style.display = "block";
+          document.getElementById('tableList').style.display = "block"
+          document.getElementById('pesquisa').style.display = "block";
         }).catch(e => {
           this.errors = e.response.data.errors
         })
