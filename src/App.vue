@@ -9,30 +9,25 @@
 
     <div class="container">
 
-      <ul>
-        <li v-for="(erro, index) of errors" :key="index">
-          campo <b>{{erro.field}}</b> - {{erro.defaultMessage}}
-        </li>
-      </ul>
-
-
-      <form @submit.prevent="salvar">
+      <form @submit.prevent="salvar" id="formCad">
 
           <label>Nome</label>
-          <input type="text" placeholder="Nome" v-model="student.name" >
+          <input type="text" placeholder="Nome" v-model="student.name" required>
           <label>CPF</label>
-          <input type="text" placeholder="cpf" v-model="student.cpf" >
+          <input type="text" placeholder="cpf" v-model="student.cpf" id="cpf" required>
           <label>Email</label>
-          <input type="email" placeholder="email" v-model="student.email" >
+          <input type="email" placeholder="email" v-model="student.email" required>
 
           <button class="waves-effect waves-light btn-small">Salvar<i class="material-icons left">save</i></button>        
       </form><br>
 
-      <button class="waves-effect waves-light btn-small" @click="listar()">Cancelar<i class="material-icons left"></i></button>
+      <button id="limpar" class="waves-effect waves-light btn-small" @click="limpar()">Cancelar<i class="material-icons left"></i></button>
 
-      <input text="text" v-model="pesquisa" placeholder="Pesquisa Alunos">
+      <button id="CadAluno" class="waves-effect waves-light btn-small" @click="CadAluno()">Cadastrar Aluno<i class="material-icons left"></i></button>
 
-      <table>
+      <input text="text" v-model="pesquisa" placeholder="Pesquisa Alunos" id="pesquisa">
+
+      <table id="tableList">
 
         <thead>
 
@@ -81,8 +76,7 @@ export default {
       student:{
         cpf: '',
         name: '',
-        email:'',
-       
+        email:'',      
       },
       students: [],
       errors: [],
@@ -118,9 +112,19 @@ export default {
     },
 
     limpar(){
-      this.name = "";
-      this.cpf = "";
-      this.email = "";
+      window.location.reload();
+      document.getElementById('formCad').style.display = "none";
+      document.getElementById('limpar').style.display = "none";
+      document.getElementById('tableList').style.display = "block";
+      document.getElementById('pesquisa').style.display = "block";
+    },
+
+    CadAluno(){
+      document.getElementById('formCad').style.display = "block";
+      document.getElementById('limpar').style.display = "block";
+      document.getElementById('CadAluno').style.display = "none";
+      document.getElementById('tableList').style.display = "none";
+      document.getElementById('pesquisa').style.display = "none";
     },
 
     salvar(){
@@ -132,6 +136,11 @@ export default {
           alert('Cadastrado com sucesso!')
           this.listar()
           this.errors = {}
+          document.getElementById('formCad').style.display = "none";
+          document.getElementById('limpar').style.display = "none";
+          document.getElementById('CadAluno').style.display = "block";
+          document.getElementById('tableList').style.display = "block";
+          document.getElementById('pesquisa').style.display = "block";
         }).catch(e => {
           this.errors = e.response.data.errors
           console.log(e.response.data.errors)
@@ -154,12 +163,18 @@ export default {
     },
 
     editar(student){
-      this.student = student
+      this.student = student;
+      document.getElementById('cpf').disabled = true;
+      document.getElementById('formCad').style.display = "block"
+      document.getElementById('limpar').style.display = "block";
+      document.getElementById('CadAluno').style.display = "none";
+      document.getElementById('tableList').style.display = "none";
+      document.getElementById('pesquisa').style.display = "none";
     },
 
     remover(ra){
 
-      if(confirm('Deseja excluir o produto?')){
+      if(confirm('Deseja excluir o aluno?')){
 
         Student.apagar(ra).then(() => {
           this.listar()
@@ -179,7 +194,12 @@ export default {
 </script>
 
 <style>
-
+#formCad{
+  display: none;
+}
+#limpar{
+  display: none;
+}
 
 
 </style>
